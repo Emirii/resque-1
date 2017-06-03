@@ -64,12 +64,17 @@ class StartScheduledWorkerCommand extends ContainerAwareCommand
         $redisHost = $this->getContainer()->getParameter('resque.redis.host');
         $redisPort = $this->getContainer()->getParameter('resque.redis.port');
         $redisDatabase = $this->getContainer()->getParameter('resque.redis.database');
+        $redisPassword = $this->getContainer()->getParameter('resque.redis.password');
 
         // Allow overriding of root_dir if deploying to a symlinked folder
         $workdirectory = $this->getContainer()->getParameter('resque.worker.root_dir');
 
         if ($redisHost != NULL && $redisPort != NULL) {
-            $env['REDIS_BACKEND'] = $redisHost . ':' . $redisPort;
+            if ($redisPassword) {
+                $env['REDIS_BACKEND'] = $redisPassword . '@' . $redisHost . ':' . $redisPort;
+            } else {
+                $env['REDIS_BACKEND'] = $redisHost . ':' . $redisPort;
+            }
         }
 
         if (isset($redisDatabase)) {
