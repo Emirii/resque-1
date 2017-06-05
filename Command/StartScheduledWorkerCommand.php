@@ -81,6 +81,10 @@ class StartScheduledWorkerCommand extends ContainerAwareCommand
             $env['REDIS_BACKEND_DB'] = $redisDatabase;
         }
 
+        if (isset($redisPassword)) {
+            $env['REDIS_BACKEND_PASSWORD'] = $redisPassword;
+        }
+
         if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
             $phpExecutable = PHP_BINARY;
         } else {
